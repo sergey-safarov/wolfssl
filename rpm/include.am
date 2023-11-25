@@ -4,6 +4,12 @@ rpm-build: rpm/spec dist
 	@rm -f *.rpm
 	rpmdev-setuptree
 	find ~/rpmbuild/RPMS ~/rpmbuild/SRPMS -name "$(PACKAGE)-$(VERSION)*.rpm" | xargs rm -f
+	@rm -Rf $(PACKAGE)-$(VERSION)-stable
+	@tar xzf $(PACKAGE)-$(VERSION).tar.gz
+	@mv $(PACKAGE)-$(VERSION) $(PACKAGE)-$(VERSION)-stable
+	@cp autogen.sh $(PACKAGE)-$(VERSION)-stable
+	@rm -f $(PACKAGE)-$(VERSION).tar.gz
+	@tar czf $(PACKAGE)-$(VERSION).tar.gz $(PACKAGE)-$(VERSION)-stable
 	@cp $(PACKAGE)-$(VERSION).tar.gz ~/rpmbuild/SOURCES/
 	@rpmbuild -ba --clean rpm/spec
 	@cp ~/rpmbuild/RPMS/*/$(PACKAGE)-$(VERSION)*.rpm .
